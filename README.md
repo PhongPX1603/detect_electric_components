@@ -1,0 +1,1 @@
+# detect_electric_components
