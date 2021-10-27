@@ -89,7 +89,7 @@ class YOLOv3Loss(loss.LossBase):
         '''
         # Get all boxes, labels from target
         boxes, labels = target['boxes'], target['labels']
-        boxes = self.xyxy2xywh(boxes)
+        boxes = self.xyxy2xywh(boxes)           # convert box from coner points to mid point and height - width
 
         # initialize targets: Tuple[Tensor[num_anchors_per_scale, S, S, 6]]
         targets = [
@@ -97,16 +97,16 @@ class YOLOv3Loss(loss.LossBase):
             for i in range(len(self.scales))
         ]
 
-        for scale_id in range(len(self.scales)):
-            anchor = self.anchor_sizes[scale_id]  # num_anchors_per_scale x 2
-            pw, ph = anchor[:, 0], anchor[:, 1]
-            grid_size = self.image_size // self.scales[scale_id]
+        for scale_id in range(len(self.scales)):    # scale_id in [0, 1, 2]
+            anchor = self.anchor_sizes[scale_id]    # num_anchors_per_scale x 2
+            pw, ph = anchor[:, 0], anchor[:, 1]     # take ratio pw, ph of anchor
+            grid_size = self.image_size // self.scales[scale_id]        # size of grid follow each scale. ex: scale=13 => grid_size = 416/13
 
             for box, label in zip(boxes, labels):
                 bx, by, bw, bh = box[0], box[1], box[2], box[3]
-                inter_area = torch.min(bw, pw) * torch.min(bh, ph)
-                union_area = bw * bh + pw * ph - inter_area
-                ious = inter_area / union_area
+                inter_area = torch.min(bw, pw) * torch.min(bh, ph)      # take intersection 
+                union_area = bw * bh + pw * ph - inter_area             # take union
+                ious = inter_area / union_area                          # compute iou
                 anchor_indices = ious.argsort(descending=True, dim=0)  # anchor_indices = 0, 1, 2
 
                 for anchor_id in anchor_indices:
@@ -136,29 +136,31 @@ class YOLOv3Loss(loss.LossBase):
         Outputs:
             loss: float
         '''
-        scale = pred.shape[2]
+        scale = pred.shape[2]       # scale = 13, 26 or 52
         grid_size = self.image_size / scale
         anchor = anchor / grid_size
 
         # check where obj and noobj (ignore if target == -1)
         obj = target[..., 0] == 1  # Iobj_i
         noobj = target[..., 0] == 0  # Inoobj_i
-        anchor = anchor.reshape(1, 3, 1, 1, 2)  # 1 x 3 x 1 x 1 x 2
+        anchor = anchor.reshape(1, 3, 1, 1, 2)  # take anchor follow each scale with shape 1 x 3 x 1 x 1 x 2
 
         # no object loss
         noobj_loss = nn.BCEWithLogitsLoss()(pred[..., 0:1][noobj], target[..., 0:1][noobj])
-
+        # compute no object loss combines a Sigmoid layer and the BCELoss in one single class
+        
         # object loss
-        bxy = torch.sigmoid(pred[..., 1:3])
-        bwh = torch.exp(pred[..., 3:5]) * anchor[..., 1:3]
-        pred_boxes = torch.cat([bxy, bwh], dim=-1)
-        true_boxes = target[..., 1:5]
-        ious = self.compute_iou(boxes1=pred_boxes[obj], boxes2=true_boxes[obj])
+        bxy = torch.sigmoid(pred[..., 1:3])                     # compute sigmoid x, y of prediction boxes
+        bwh = torch.exp(pred[..., 3:5]) * anchor[..., 1:3]      # compute exp w, h of prediction boxes after that multiplicate with anchor ratio
+        pred_boxes = torch.cat([bxy, bwh], dim=-1)              # concatinate follow last dim
+        true_boxes = target[..., 1:5]                           # take true box
+        ious = self.compute_iou(boxes1=pred_boxes[obj], boxes2=true_boxes[obj])         # compute iou of pred_boxes and true_boxes
         obj_loss = nn.MSELoss()(torch.sigmoid(pred[..., 0:1][obj]), ious * target[..., 0:1][obj])
+        # compute 
 
         # coordinate loss
-        pred[..., 1:3] = torch.sigmoid(pred[..., 1:3])  # x,y coordinates
-        target[..., 3:5] = torch.log(1e-16 + target[..., 3:5] / anchor)  # width, height coordinates
+        pred[..., 1:3] = torch.sigmoid(pred[..., 1:3])  # x,y coordinates of prediction boxes
+        target[..., 3:5] = torch.log(1e-16 + target[..., 3:5] / anchor)  # width, height coordinates of true boxes
         bbox_loss = nn.MSELoss()(pred[..., 1:5][obj], target[..., 1:5][obj])
 
         # class loss
