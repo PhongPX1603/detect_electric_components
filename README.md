@@ -121,4 +121,5 @@ python real_time_inference.py --type-inference 'image' --input-dir <image dir> -
                                                'video'             <video dir>
                                                'webcam'            0
 ```
-
+## Contributor
+*Xuan-Phong Pham*
