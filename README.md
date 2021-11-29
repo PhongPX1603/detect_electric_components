@@ -113,6 +113,8 @@ dataset
 * Run the script below to train the model. Specify particular name to identify your experiment:
 ```python -m flame configs/electric_labelme_testing.yaml```
 
+
+
 ## Inference
 * You can use this script to make inferences on particular folder
 * Result are saved at <output/img.jpg> if type inference is 'image' or <video-output.mp4> with 'video or webcam' type.
@@ -121,5 +123,8 @@ python real_time_inference.py --type-inference 'image' --input-dir <image dir> -
                                                'video'             <video dir>
                                                'webcam'            0
 ```
+![yolov3](https://user-images.githubusercontent.com/86842861/143871002-b2516c01-b3d2-4d2a-b1fe-62bfb28bcb47.gif)
+
+
 ## Contributor
 *Xuan-Phong Pham*
