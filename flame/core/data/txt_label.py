@@ -40,7 +40,7 @@ class YOLODataset(Dataset):
         return data_pairs
 
     def __len__(self):
-        return len(self.data_pairs)
+        return len(self.make_datapath_list())
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict, Tuple[str, Tuple[int, int]]]:
         data_pairs = self.make_datapath_list()
