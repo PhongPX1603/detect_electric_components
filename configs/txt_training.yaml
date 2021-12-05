@@ -6,17 +6,16 @@ data:
       dataset:
         module: flame.core.data.txt_label
         class: YOLODataset
-        LabelmeDataset:
-          image_size: 416
-          dirnames:
+        YOLODataset:
+          image_dir:
             - '''../train/images'''
+          label_dir:
+            - '''../train/labels'''
+          image_size: 416
           image_patterns: ['''*.jpg''', '''*.JPG''']
           label_patterns: ['''*.txt''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
-          classes:
-            mark: 0
-            no_mark: 1
           transforms:
             - iaa.MotionBlur()
             - iaa.ChangeColorTemperature()
@@ -43,17 +42,16 @@ data:
       dataset:
         module: flame.core.data.txt_label
         class: YOLODataset
-        LabelmeDataset:
+        YOLODataset:
+          image_dir:
+            - '''../train/images'''
+          label_dir:
+            - '''../train/labels'''
           image_size: 416
-          dirnames:
-            - '''../test_dataset/valid/'''
           image_patterns: ['''*.jpg''', '''*.JPG''']
           label_patterns: ['''*.json''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
-          classes:
-            mark: 0
-            no_mark: 1
       batch_size: 4
       shuffle: False
       num_workers: 2
@@ -68,17 +66,16 @@ data:
       dataset:
         module: flame.core.data.txt_label
         class: YOLODataset
-        LabelmeDataset:
+        YOLODataset:
+          image_dir:
+            - '''../train/images'''
+          label_dir:
+            - '''../train/labels'''
           image_size: 416
-          dirnames:
-            - '''../test_dataset/valid/'''
           image_patterns: ['''*.jpg''', '''*.JPG''']
           label_patterns: ['''*.json''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
-          classes:
-            mark: 0
-            no_mark: 1
       batch_size: 4
       shuffle: False
       num_workers: 2
