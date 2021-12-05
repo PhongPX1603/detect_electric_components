@@ -34,7 +34,7 @@ class YOLODataset(Dataset):
         img_paths = sorted(Path(image_dir).glob("*.jpg"))
         label_paths = sorted(Path(label_dir).glob("*.txt"))
 
-        self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths) if image.stem == label.stem]
+        self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths) if image_path.stem == label_path.stem]
         print(self.data_pairs[0])
 
     def __len__(self):
