@@ -5,13 +5,13 @@ data:
     DataLoader:
       dataset:
         module: flame.core.data.txt_label
-        class: LabelmeDataset
+        class: YOLODataset
         LabelmeDataset:
           image_size: 416
           dirnames:
-            - '''../test_dataset/train/'''
+            - '''../train/images'''
           image_patterns: ['''*.jpg''', '''*.JPG''']
-          label_patterns: ['''*.json''']
+          label_patterns: ['''*.txt''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           classes:
@@ -42,7 +42,7 @@ data:
     DataLoader:
       dataset:
         module: flame.core.data.txt_label
-        class: LabelmeDataset
+        class: YOLODataset
         LabelmeDataset:
           image_size: 416
           dirnames:
@@ -67,7 +67,7 @@ data:
     DataLoader:
       dataset:
         module: flame.core.data.txt_label
-        class: LabelmeDataset
+        class: YOLODataset
         LabelmeDataset:
           image_size: 416
           dirnames:
