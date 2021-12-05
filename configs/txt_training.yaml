@@ -35,6 +35,7 @@ data:
       drop_last: False
       collate_fn: 'lambda batch:tuple(zip(*batch))'
   
+  
   train_eval:
     module: torch.utils.data
     class: DataLoader
