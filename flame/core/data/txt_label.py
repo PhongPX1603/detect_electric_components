@@ -11,71 +11,57 @@ from torch.utils.data import Dataset
 from typing import Dict, Tuple, List, Optional
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
-# ImageFile.LOAD_TRUNCATED_IMAGES = True
+import cv2
+import torch
+import random
+import numpy as np
+import imgaug.augmenters as iaa
 
-class YOLODataset(Dataset):
+from pathlib import Path
+from natsort import natsorted
+from torch.utils.data import Dataset
+from typing import Dict, Tuple, List, Optional
+from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
+
+
+class dataset(Dataset):
     def __init__(
         self,
-        img_path,
-        anno_path,
-        anchors,
-        mean,
-        std,
-        image_size=416,
-        S=[13, 26, 52],
-        C=13,
-        transforms=None,
-    ):
-        self.img_path = img_path
-        self.anno_path = anno_path
+        image_dir: List[str] = None,
+        label_dir: List[str] = None,
+        image_size: int = 416,
+        image_patterns: List[str] = ['*.jpg'],
+        label_patterns: List[str] = ['*.json'],
+        mean: List[float] = [0.485, 0.456, 0.406],
+        std: List[float] = [0.229, 0.224, 0.225],
+        transforms: Optional[List] = None,
+    ) -> None:
+        super(dataset, self).__init__()
+        self.classes = classes
         self.image_size = image_size
-        self.transforms = transforms
-        self.S = S
-        self.anchors = torch.tensor(anchors[0] + anchors[1] + anchors[2])  # for all 3 scales
-        self.num_anchors = self.anchors.shape[0]
         self.std = torch.tensor(std, dtype=torch.float).view(3, 1, 1)
         self.mean = torch.tensor(mean, dtype=torch.float).view(3, 1, 1)
-        self.num_anchors_per_scale = self.num_anchors // 3
-        self.C = C
-        self.ignore_iou_thresh = 0.5
+        self.pad_to_square = iaa.PadToSquare(position='right-bottom')
+        self.transforms = transforms if transforms else []
 
-    
+        img_paths = sorted(Path(image_dir).glob(f"*.jpg"))
+        label_paths = sorted(Path(label_dir).glob(f"*.txt"))
 
-    def make_datapath_list(self):
-        img_paths = sorted(Path(self.img_path).glob(f"*.jpg"))
-        anno_paths = sorted(Path(self.anno_path).glob(f"*.txt"))
+        data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths)]
 
-        data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, anno_paths)]
+        self.data_pairs = [[image, label] for image, label in zip(img_paths, label_paths) if image.stem == label.stem]
 
-        return data_pairs
-
-
-    def iou(self, boxes1, boxes2):
-        """
-        Parameters:
-            boxes1 (tensor): width and height of the first bounding boxes
-            boxes2 (tensor): width and height of the second bounding boxes
-        Returns:
-            tensor: Intersection over union of the corresponding boxes
-        """
-        intersection = torch.min(boxes1[..., 0], boxes2[..., 0]) * torch.min(
-            boxes1[..., 1], boxes2[..., 1]
-        )
-        union = (
-            boxes1[..., 0] * boxes1[..., 1] + boxes2[..., 0] * boxes2[..., 1] - intersection
-        )
-        return intersection / union
-    
     def __len__(self):
-        return len(self.make_datapath_list())
+        return len(self.data_pairs)
 
-    def __getitem__(self, idx):
-        data_pairs = self.make_datapath_list()
-        image_path, label_path = data_pairs[idx]
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict, Tuple[str, Tuple[int, int]]]:
+        image_path, label_path = self.data_pairs[idx]
         bboxes = np.roll(np.loadtxt(fname=str(label_path), delimiter=" ", ndmin=2), 4, axis=1).tolist()
-        image = np.array(Image.open(str(image_path)).convert("RGB"))
+        image = cv2.imread(str(image_path))
         image_info = (str(image_path), image.shape[1::-1])
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         h, w = image.shape[:2]
+
         bboxes = [[
                    (box[0] - box[2] / 2) * w,
                    (box[1] - box[3] / 2) * h,
@@ -106,6 +92,7 @@ class YOLODataset(Dataset):
                    (bb.y2 - bb.y1) / self.image_size] 
                   for bb in bounding_boxes]
         labels = [bb.label for bb in bounding_boxes]
+
         # Convert to Torch Tensor
         iscrowd = torch.zeros((len(labels),), dtype=torch.int64)  # suppose all instances are not crowd
         labels = torch.tensor(labels, dtype=torch.int64)
