@@ -18,13 +18,12 @@ class YOLODataset(Dataset):
         self,
         image_dir,
         label_dir,
-        image_size: int = 416,
-        image_patterns: List[str] = ['*.jpg'],
-        label_patterns: List[str] = ['*.txt'],
-        mean: List[float] = [0.485, 0.456, 0.406],
-        std: List[float] = [0.229, 0.224, 0.225],
-        transforms: Optional[List] = None,
-    ) -> None:
+        image_size,
+        image_patterns,
+        label_patterns,
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225],
+        transforms=None):
         super(YOLODataset, self).__init__()
         self.image_size = image_size
         self.std = torch.tensor(std, dtype=torch.float).view(3, 1, 1)
