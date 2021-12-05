@@ -4,7 +4,7 @@ data:
     class: DataLoader
     DataLoader:
       dataset:
-        module: flame.core.data.labelme_dataset
+        module: flame.core.data.electric_components
         class: LabelmeDataset
         LabelmeDataset:
           image_size: 416
@@ -44,7 +44,7 @@ data:
     class: DataLoader
     DataLoader:
       dataset:
-        module: flame.core.data.labelme_dataset
+        module: flame.core.data.electric_components
         class: LabelmeDataset
         LabelmeDataset:
           image_size: 416
@@ -72,7 +72,7 @@ data:
     class: DataLoader
     DataLoader:
       dataset:
-        module: flame.core.data.labelme_dataset
+        module: flame.core.data.electric_components
         class: LabelmeDataset
         LabelmeDataset:
           image_size: 416
