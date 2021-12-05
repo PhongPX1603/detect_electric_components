@@ -16,8 +16,8 @@ from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 class YOLODataset(Dataset):
     def __init__(
         self,
-        image_dir: List[str] = None,
-        label_dir: List[str] = None,
+        image_dir,
+        label_dir,
         image_size: int = 416,
         image_patterns: List[str] = ['*.jpg'],
         label_patterns: List[str] = ['*.txt'],
