@@ -11,20 +11,8 @@ from torch.utils.data import Dataset
 from typing import Dict, Tuple, List, Optional
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 
-import cv2
-import torch
-import random
-import numpy as np
-import imgaug.augmenters as iaa
 
-from pathlib import Path
-from natsort import natsorted
-from torch.utils.data import Dataset
-from typing import Dict, Tuple, List, Optional
-from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
-
-
-class dataset(Dataset):
+class YOLODataset(Dataset):
     def __init__(
         self,
         image_dir: List[str] = None,
@@ -36,7 +24,7 @@ class dataset(Dataset):
         std: List[float] = [0.229, 0.224, 0.225],
         transforms: Optional[List] = None,
     ) -> None:
-        super(dataset, self).__init__()
+        super(YOLODataset, self).__init__()
         self.classes = classes
         self.image_size = image_size
         self.std = torch.tensor(std, dtype=torch.float).view(3, 1, 1)
