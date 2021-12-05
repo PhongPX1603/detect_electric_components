@@ -31,16 +31,16 @@ class YOLODataset(Dataset):
         self.pad_to_square = iaa.PadToSquare(position='right-bottom')
         self.transforms = transforms if transforms else []
 
-    def make_datapath_list(self):
-        img_paths = sorted(Path(self.img_path).glob(f"*.jpg"))
-        anno_paths = sorted(Path(self.anno_path).glob(f"*.txt"))
+        img_paths = sorted(Path(image_dir).glob("*.jpg"))
+        label_paths = sorted(Path(label_dir).glob("*.txt"))
 
-        data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, anno_paths)]
+        data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths)]
 
-        return data_pairs
+        self.data_pairs = [[image, label] for image, label in zip(img_paths, label_paths) if image.stem == label.stem]
+        print(self.data_pairs[0])
 
     def __len__(self):
-        return len(self.make_datapath_list())
+        return len(self.data_pairs)
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict, Tuple[str, Tuple[int, int]]]:
         data_pairs = self.make_datapath_list()
