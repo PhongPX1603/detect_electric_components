@@ -26,7 +26,6 @@ class YOLODataset(Dataset):
         transforms: Optional[List] = None,
     ) -> None:
         super(YOLODataset, self).__init__()
-        self.classes = classes
         self.image_size = image_size
         self.std = torch.tensor(std, dtype=torch.float).view(3, 1, 1)
         self.mean = torch.tensor(mean, dtype=torch.float).view(3, 1, 1)
