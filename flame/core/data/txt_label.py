@@ -20,7 +20,7 @@ class YOLODataset(Dataset):
         label_dir: List[str] = None,
         image_size: int = 416,
         image_patterns: List[str] = ['*.jpg'],
-        label_patterns: List[str] = ['*.json'],
+        label_patterns: List[str] = ['*.txt'],
         mean: List[float] = [0.485, 0.456, 0.406],
         std: List[float] = [0.229, 0.224, 0.225],
         transforms: Optional[List] = None,
@@ -32,8 +32,8 @@ class YOLODataset(Dataset):
         self.pad_to_square = iaa.PadToSquare(position='right-bottom')
         self.transforms = transforms if transforms else []
 
-        img_paths = sorted(Path(image_dir).glob(f"*.jpg"))
-        label_paths = sorted(Path(label_dir).glob(f"*.txt"))
+        img_paths = sorted(Path(image_dir).glob("*.jpg"))
+        label_paths = sorted(Path(label_dir).glob("*.txt"))
 
         data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths)]
 
