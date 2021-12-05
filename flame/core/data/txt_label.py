@@ -34,17 +34,14 @@ class YOLODataset(Dataset):
         img_paths = sorted(Path(image_dir).glob("*.jpg"))
         label_paths = sorted(Path(label_dir).glob("*.txt"))
 
-        data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths)]
-
-        self.data_pairs = [[image, label] for image, label in zip(img_paths, label_paths) if image.stem == label.stem]
+        self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, label_paths) if image.stem == label.stem]
         print(self.data_pairs[0])
 
     def __len__(self):
         return len(self.data_pairs)
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict, Tuple[str, Tuple[int, int]]]:
-        data_pairs = self.make_datapath_list()
-        image_path, label_path = data_pairs[idx]
+        image_path, label_path = self.data_pairs[idx]
         bboxes = np.roll(np.loadtxt(fname=str(label_path), delimiter=" ", ndmin=2), 4, axis=1).tolist()
         image = cv2.imread(str(image_path))
         image_info = (str(image_path), image.shape[1::-1])
