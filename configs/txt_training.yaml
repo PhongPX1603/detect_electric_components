@@ -43,9 +43,9 @@ data:
         class: YOLODataset
         YOLODataset:
           image_dir:
-            - '''../train/images'''
+            - '''../valid/images'''
           label_dir:
-            - '''../train/labels'''
+            - '''../valid/labels'''
           image_size: 416
           image_patterns: ['''*.jpg''', '''*.JPG''']
           label_patterns: ['''*.json''']
@@ -67,9 +67,9 @@ data:
         class: YOLODataset
         YOLODataset:
           image_dir:
-            - '''../train/images'''
+            - '''../test/images'''
           label_dir:
-            - '''../train/labels'''
+            - '''../test/labels'''
           image_size: 416
           image_patterns: ['''*.jpg''', '''*.JPG''']
           label_patterns: ['''*.json''']
