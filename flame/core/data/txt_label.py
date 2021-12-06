@@ -33,9 +33,9 @@ class YOLODataset(Dataset):
 
         image_paths, label_paths = [], []
         for image_pattern in image_patterns:
-            image_paths.extend(Path(image_dir).glob('**/{}'.format(image_pattern)))
+            image_paths.extend(Path(image_dir).glob('**/{}'.format(image_patterns)))
         for label_pattern in label_patterns:
-            label_paths.extend(Path(label_dir).glob('**/{}'.format(label_pattern)))
+            label_paths.extend(Path(label_dir).glob('**/{}'.format(label_patterns)))
 
         image_paths = natsorted(image_paths, key=lambda x: str(x.stem))
         label_paths = natsorted(label_paths, key=lambda x: str(x.stem))
