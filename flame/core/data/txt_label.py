@@ -63,20 +63,19 @@ class YOLODataset(Dataset):
                 label=info[4]
             ) for info in bboxes]
 
-        bounding_boxes = BoundingBoxesOnImage(bounding_boxes=bounding_boxes, shape=image.shape)
+        bbs = BoundingBoxesOnImage(bounding_boxes=bounding_boxes, shape=image.shape)
 
-        for transform in self.transforms:
-            image, bounding_boxes = transform(image=image, bounding_boxes=bounding_boxes)
-        
-        image, bounding_boxes = iaa.PadToSquare(position='right-bottom')(image=image, bounding_boxes=bounding_boxes)
-        image, bounding_boxes = iaa.Resize(self.image_size)(image=image, bounding_boxes=bounding_boxes)
+        for transform in random.sample(self.transforms, k=random.randint(0, len(self.transforms))):
+            image, bbs = transform(image=image, bounding_boxes=bbs)         # implement transforms (data augementation)
 
-        bboxes = [[(bb.x1 + bb.x2) / (2 * self.image_size), 
-                   (bb.y1 + bb.y2) / (2 * self.image_size), 
-                   (bb.x2 - bb.x1) / self.image_size, 
-                   (bb.y2 - bb.y1) / self.image_size] 
-                  for bb in bounding_boxes]
-        labels = [bb.label for bb in bounding_boxes]
+        # Rescale image and bounding boxes
+        image, bbs = self.pad_to_square(image=image, bounding_boxes=bbs)        # pad 0 values to input image to shape is square. And just pad for right or bottom 
+        image, bbs = iaa.Resize(size=self.image_size)(image=image, bounding_boxes=bbs)      # resize to input size of sample
+        bbs = bbs.on(image)
+
+        # Convert from Bouding Box Object to boxes, labels list
+        boxes = [[bb.x1, bb.y1, bb.x2, bb.y2] for bb in bbs.bounding_boxes]     # take bboxes after transforms
+        labels = [bb.label for bb in bbs.bounding_boxes]
 
         # Convert to Torch Tensor
         iscrowd = torch.zeros((len(labels),), dtype=torch.int64)  # suppose all instances are not crowd
