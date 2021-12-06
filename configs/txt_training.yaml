@@ -10,8 +10,8 @@ data:
           image_dir: '''../train/images'''
           label_dir: '''../train/labels'''
           image_size: 416
-          image_patterns: ['''*.jpg''', '''*.JPG''']
-          label_patterns: ['''*.txt''']
+          image_patterns: '''*.jpg'''
+          label_patterns: '''*.txt'''
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           transforms:
@@ -47,8 +47,8 @@ data:
           label_dir:
             - '''../valid/labels'''
           image_size: 416
-          image_patterns: ['''*.jpg''', '''*.JPG''']
-          label_patterns: ['''*.json''']
+          image_patterns: '''*.jpg'''
+          label_patterns: '''*.txt'''
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
       batch_size: 4
@@ -71,8 +71,8 @@ data:
           label_dir:
             - '''../test/labels'''
           image_size: 416
-          image_patterns: ['''*.jpg''', '''*.JPG''']
-          label_patterns: ['''*.json''']
+          image_patterns: '''*.jpg'''
+          label_patterns: '''*.txt'''
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
       batch_size: 4
