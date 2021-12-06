@@ -31,16 +31,10 @@ class YOLODataset(Dataset):
         self.pad_to_square = iaa.PadToSquare(position='right-bottom')
         self.transforms = transforms if transforms else []
 
-        image_paths, label_paths = [], []
-        for image_pattern in image_patterns:
-            image_paths.extend(Path(image_dir).glob('**/{}'.format(image_patterns)))
-        for label_pattern in label_patterns:
-            label_paths.extend(Path(label_dir).glob('**/{}'.format(label_patterns)))
+        img_paths = natsorted(Path(image_dir).glob("*.jpg"))
+        anno_paths = natsorted(Path(label_dir).glob("*.txt"))
 
-        image_paths = natsorted(image_paths, key=lambda x: str(x.stem))
-        label_paths = natsorted(label_paths, key=lambda x: str(x.stem))
-
-        self.data_pairs = [[image, label] for image, label in zip(image_paths, label_paths) if image.stem == label.stem]
+        self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, anno_paths)]
 
     def __len__(self):
         return len(self.data_pairs)
