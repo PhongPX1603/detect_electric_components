@@ -35,6 +35,8 @@ class YOLODataset(Dataset):
         anno_paths = sorted(Path(label_dir).glob("*.txt"))
 
         self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, anno_paths)]
+        
+        print(len(self.data_pairs))
 
     def __len__(self):
         return len(self.data_pairs)
