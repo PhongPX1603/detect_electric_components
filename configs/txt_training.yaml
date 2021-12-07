@@ -183,7 +183,7 @@ lr_scheduler:
     score_name: '''loss'''
     evaluator_name: '''valid_evaluator'''
     mode: '''min'''
-    patience: 3
+    patience: 5
     verbose: True
 
 early_stopping:
@@ -193,7 +193,7 @@ early_stopping:
     score_name: '''loss'''
     evaluator_name: '''valid_evaluator'''
     mode: '''min'''
-    patience: 50
+    patience: 25
 
 best_saver:
   module: flame.handlers.checkpoint
