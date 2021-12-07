@@ -64,8 +64,8 @@ data:
         module: flame.core.data.txt_label
         class: YOLODataset
         YOLODataset:
-          image_dir: '''../test/images'''
-          label_dir: '''../test/labels'''
+          image_dir: '''../test'''
+          label_dir: '''../test'''
           image_size: 416
           image_patterns: '''*.jpg'''
           label_patterns: '''*.txt'''
