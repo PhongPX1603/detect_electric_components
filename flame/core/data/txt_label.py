@@ -31,8 +31,8 @@ class YOLODataset(Dataset):
         self.pad_to_square = iaa.PadToSquare(position='right-bottom')
         self.transforms = transforms if transforms else []
 
-        img_paths = natsorted(Path(image_dir).glob("*.jpg"))
-        anno_paths = natsorted(Path(label_dir).glob("*.txt"))
+        img_paths = sorted(Path(image_dir).glob("**/*.jpg"))
+        anno_paths = sorted(Path(label_dir).glob("**/*.txt"))
 
         self.data_pairs = [[image_path, label_path] for image_path, label_path in zip(img_paths, anno_paths)]
 
