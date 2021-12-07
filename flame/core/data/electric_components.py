@@ -43,8 +43,7 @@ class LabelmeDataset(Dataset):
         label_paths = natsorted(label_paths, key=lambda x: str(x.stem))
 
         self.data_pairs = [[image, label] for image, label in zip(image_paths, label_paths) if image.stem == label.stem]        # zip each other image and label to data_pair list
-                                                                                                                                
-        print(f'{Path(dirnames[0]).parent.stem}: {len(self.data_pairs)}')
+                                                                                                                    
 
     def __len__(self):
         return len(self.data_pairs)
