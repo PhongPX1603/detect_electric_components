@@ -43,6 +43,7 @@ class YOLODataset(Dataset):
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, Dict, Tuple[str, Tuple[int, int]]]:
         image_path, label_path = self.data_pairs[idx]
+        print(image_path)
         bboxes = np.roll(np.loadtxt(fname=str(label_path), delimiter=" ", ndmin=2), 4, axis=1).tolist()
         image = cv2.imread(str(image_path))
         image_info = (str(image_path), image.shape[1::-1])
