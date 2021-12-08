@@ -101,7 +101,6 @@ class YOLOv3Loss(loss.LossBase):
             anchor = self.anchor_sizes[scale_id]    # num_anchors_per_scale x 2
             pw, ph = anchor[:, 0], anchor[:, 1]     # take ratio pw, ph of anchor
             grid_size = self.image_size // self.scales[scale_id]        # size of grid follow each scale. ex: scale=13 => grid_size = 416/13
-            print('OK 1')
 
             for box, label in zip(boxes, labels):
                 bx, by, bw, bh = box[0], box[1], box[2], box[3]
@@ -112,8 +111,8 @@ class YOLOv3Loss(loss.LossBase):
 
                 for anchor_id in anchor_indices:
                     j, i = min(int(bx // grid_size), self.scales[scale_id] - 1) , min(int(by // grid_size), self.scales[scale_id] - 1)  # which cell? Ex: S=13, cx=0.5 --> i=int(13 * 0.5)=6
+                    print(self.scales[scale_id] - 1, j, i)
                     anchor_taken = targets[scale_id][anchor_id, i, j, 0]
-                    print('OK 2')
 
                     if not anchor_taken:
                         cell_w, cell_h = bw / grid_size, bh / grid_size
