@@ -28,7 +28,7 @@ class YOLODataset(Dataset):
         self.image_size = image_size
         self.std = torch.tensor(std, dtype=torch.float).view(3, 1, 1)
         self.mean = torch.tensor(mean, dtype=torch.float).view(3, 1, 1)
-        self.pad_to_square = iaa.PadToSquare(position='right-bottom')
+        self.pad_to_square = iaa.PadToSquare(position='center')
         self.transforms = transforms if transforms else []
 
         img_paths = sorted(Path(image_dir).glob("*.jpg"))
