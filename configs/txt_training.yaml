@@ -7,11 +7,11 @@ data:
         module: flame.core.data.txt_label
         class: YOLODataset
         YOLODataset:
-          image_dir: '''../train'''
-          label_dir: '''../train'''
+          dirnames:
+            - '''../dataset/train'''
           image_size: 416
-          image_patterns: '''*.jpg'''
-          label_patterns: '''*.txt'''
+          image_patterns: ['''*.jpg''']
+          label_patterns: ['''*.txt''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           transforms:
@@ -42,11 +42,11 @@ data:
         module: flame.core.data.txt_label
         class: YOLODataset
         YOLODataset:
-          image_dir: '''../valid'''
-          label_dir: '''../valid'''
+          dirnames:
+            - '''../dataset/test'''
           image_size: 416
-          image_patterns: '''*.jpg'''
-          label_patterns: '''*.txt'''
+          image_patterns: ['''*.jpg''']
+          label_patterns: ['''*.txt''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
       batch_size: 4
@@ -64,11 +64,11 @@ data:
         module: flame.core.data.txt_label
         class: YOLODataset
         YOLODataset:
-          image_dir: '''../test'''
-          label_dir: '''../test'''
+          dirnames:
+            - '''../dataset/test'''
           image_size: 416
-          image_patterns: '''*.jpg'''
-          label_patterns: '''*.txt'''
+          image_patterns: ['''*.jpg''']
+          label_patterns: ['''*.txt''']
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
       batch_size: 4
