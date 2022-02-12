@@ -1,12 +1,32 @@
 # Detect Electric Components
 
+## Installation
+### Installing from source
+
+For normal training and evaluation we recommend installing the package from source using a poetry virtual environment.
+
+```bash
+git clone https://github.com/PhongPX1603/detect_electric_components.git
+cd detect_electric_components/
+pip install -r requirements.txt
+pip install pytorch-ignite
+pip install git+https://github.com/aleju/imgaug.git
+```
+
+#### Download pretrained weights
+
+```bash
+https://drive.google.com/file/d/1e4ageUTMBVpGc3Nrdrr1cEzMS6Gnsj_M/view?usp=sharing
+```
+
 ## Project Structure
 ```
     detect_electric_components
                     |
                     ├── config
-                    |	  ├── electric_labelme_training.yaml      
-                    |	  └── electric_labelme_testing.yaml
+                    |	  ├── electric_labelme_training.yaml      #train with label json file
+                    |	  ├── electric_labelme_testing.yaml
+                    |     └── txt_training.yaml                   #train with label txt file
                     |
                     ├── flame
                     |	  ├── core 
@@ -48,19 +68,25 @@
                     |           ├── region_predictor.py
                     |           ├── screenlogger.py
                     |           └── terminate_on_nan.py
-                    |   
+                    |
+                    ├── inference
+                    |	  ├── config.yaml
+                    |	  ├── darknet53.py
+                    |	  ├── predictor.py
+                    |	  ├── real_time_inference.py
+                    |     └── utils.py
                     |
                     ├── __main__.py
                     ├── module.py
                     └── utils.py
 ```
 ## Dataset
-* Data about 200 images labeled (json file) of "Electric Components".
+* Data more 200 "Electric Components" images.
 * Data divided into 2 parts: train and valid folders.
 
 | Name  | Train | Valid | Test | Label's Format |
 | ---   | ---         |     ---      |  --- |   --- |
-| Electric Components | 152 |  50    |  ---   | JSON    |
+| Electric Components | 167 |  39    |  ---   | json or txt    |
 
 #### Use augumentation technical to make variety the dataset. Use library: "imgaug.augmenters". Some augumentations I use:
 Install imgaug package ```pip install git+https://github.com/aleju/imgaug.git```
@@ -108,17 +134,17 @@ dataset
 * Run the script below to train the model. Specify particular name to identify your experiment:
 ```python -m flame configs/electric_labelme_training.yaml```
 
-### Evaluation
-* Change your direct of test dataset folder in ```config/electric_labelme_testing.yaml```
-* Run the script below to train the model. Specify particular name to identify your experiment:
+### Test
+* Change your direct of test dataset folder and weights file in ```config/electric_labelme_testing.yaml```
+* Run the script below to test the model:
 ```python -m flame configs/electric_labelme_testing.yaml```
-
 
 
 ## Inference
 * You can use this script to make inferences on particular folder
 * Result are saved at <output/img.jpg> if type inference is 'image' or <video-output.mp4> with 'video or webcam' type.
 ```
+cd inference
 python real_time_inference.py --type-inference 'image' --input-dir <image dir> --video-output <video_output.mp4>
                                                'video'             <video dir>
                                                'webcam'            0
