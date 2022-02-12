@@ -3,12 +3,11 @@
 ## Installation
 ### Installing from source
 
-For normal training and evaluation we recommend installing the package from source using a poetry virtual environment.
+For normal training and evaluation we should install the package from source using colab environment.
 
 ```bash
 git clone https://github.com/PhongPX1603/detect_electric_components.git
 cd detect_electric_components/
-pip install -r requirements.txt
 pip install pytorch-ignite
 pip install git+https://github.com/aleju/imgaug.git
 ```
@@ -141,6 +140,10 @@ dataset
 
 
 ## Inference
+### Installing to inference
+```bash
+pip install -r requirements.txt
+```
 * You can use this script to make inferences on particular folder
 * Result are saved at <output/img.jpg> if type inference is 'image' or <video-output.mp4> with 'video or webcam' type.
 ```
