@@ -155,6 +155,9 @@ python real_time_inference.py --type-inference 'image' --input-dir <image dir> -
 ```
 ![yolov3](https://user-images.githubusercontent.com/86842861/143871002-b2516c01-b3d2-4d2a-b1fe-62bfb28bcb47.gif)
 
+## Feature
+* YOLOv4: https://github.com/PhongPX1603/components_yolov4
+
 ## Acknowledgements
 * https://github.com/aladdinpersson/Machine-Learning-Collection/blob/master/ML/Pytorch/object_detection/YOLOv3/model.py
 
