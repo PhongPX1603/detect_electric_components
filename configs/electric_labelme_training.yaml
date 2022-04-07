@@ -15,13 +15,11 @@ data:
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           classes:
-              mark: 0
-              no_mark: 1
-#             capacitor: 0
-#             diode: 1
-#             IC: 2
-#             resistor: 3
-#             transistor: 4
+            capacitor: 0
+            diode: 1
+            IC: 2
+            resistor: 3
+            transistor: 4
           transforms:
             - iaa.MotionBlur()
             - iaa.ChangeColorTemperature()
