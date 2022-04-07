@@ -57,13 +57,11 @@ data:
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           classes:
-              mark: 0
-              no_mark: 1
-#             capacitor: 0
-#             diode: 1
-#             IC: 2
-#             resistor: 3
-#             transistor: 4
+            capacitor: 0
+            diode: 1
+            IC: 2
+            resistor: 3
+            transistor: 4
       batch_size: 4
       shuffle: False
       num_workers: 2
@@ -87,13 +85,11 @@ data:
           mean: [0.485, 0.456, 0.406]
           std: [0.229, 0.224, 0.225]
           classes:
-              mark: 0
-              no_mark: 1
-#             capacitor: 0
-#             diode: 1
-#             IC: 2
-#             resistor: 3
-#             transistor: 4
+            capacitor: 0
+            diode: 1
+            IC: 2
+            resistor: 3
+            transistor: 4
       batch_size: 4
       shuffle: False
       num_workers: 2
@@ -222,7 +218,7 @@ best_saver:
   module: flame.handlers.checkpoint
   class: BestSaver
   BestSaver:
-    dirname: '''checkpoint/vehicle_registration/'''
+    dirname: '''checkpoint/components/'''
     score_name: '''loss'''
     mode: '''min'''
     evaluator_name: '''valid_evaluator'''
@@ -240,7 +236,7 @@ backup_saver:
       - '''history'''
       - '''lr_scheduler'''
       - '''early_stopping'''
-    dirname: '''checkpoint/vehicle_registration/'''
+    dirname: '''checkpoint/components/'''
     save_interval: 1
     n_saved: 1
 
