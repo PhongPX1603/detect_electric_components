@@ -117,7 +117,7 @@ model:
   Model:
     weight_path: '''../78.1map_0.2threshold_PASCAL.tar'''
     in_channels: 3
-    num_classes: 2
+    num_classes: 5
 
 optim:
   module: torch.optim
